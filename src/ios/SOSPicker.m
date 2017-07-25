@@ -70,10 +70,10 @@ typedef enum : NSUInteger {
     self.quality = [[options objectForKey:@"quality"] integerValue];
 
     self.callbackId = command.callbackId;
-    [self launchGMImagePicker:allow_video title:title message:message disable_popover:disable_popover];
+    [self launchGMImagePicker:allow_video title:title message:message disable_popover:disable_popover maximumImagesCount:maximumImagesCount];
 }
 
-- (void)launchGMImagePicker:(bool)allow_video title:(NSString *)title message:(NSString *)message disable_popover:(BOOL)disable_popover
+- (void)launchGMImagePicker:(bool)allow_video title:(NSString *)title message:(NSString *)message disable_popover:(BOOL)disable_popover maximumImagesCount:(NSInteger) maximumImagesCount
 {
     GMImagePickerController *picker = [[GMImagePickerController alloc] init:allow_video];
     picker.delegate = self;
@@ -82,6 +82,7 @@ typedef enum : NSUInteger {
     picker.colsInPortrait = 4;
     picker.colsInLandscape = 6;
     picker.minimumInteritemSpacing = 2.0;
+    picker.maximumImagesCount = maximumImagesCount;
 
 	if(!disable_popover) {
 	    picker.modalPresentationStyle = UIModalPresentationPopover;

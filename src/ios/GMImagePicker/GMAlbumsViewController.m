@@ -35,11 +35,12 @@
 
 @implementation GMAlbumsViewController{
     bool allow_video;
+    NSInteger max;
 }
 
 @synthesize dic_asset_fetches;
 
-- (id)init:(bool)allow_v
+- (id)init:(bool)allow_v maximumImagesCount:(NSInteger) maximumImagesCount
 {
     if (self = [super initWithStyle:UITableViewStylePlain])
     {
@@ -49,7 +50,7 @@
     dic_asset_fetches = [[NSMutableDictionary alloc] init];
     
     allow_video = allow_v;
-    
+    max = maximumImagesCount;
     return self;
 }
 
@@ -356,7 +357,7 @@ static NSString * const CollectionCellReuseIdentifier = @"CollectionCell";
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     
     //Init the GMGridViewController
-    GMGridViewController *gridViewController = [[GMGridViewController alloc] initWithPicker:[self picker]];
+    GMGridViewController *gridViewController = [[GMGridViewController alloc] initWithPicker:[self picker] maximumImagesCount:max];
     //Set the title
     gridViewController.title = cell.textLabel.text;
     //Use the prefetched assets!
