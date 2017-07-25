@@ -438,7 +438,7 @@ NSString * const GMGridViewCellIdentifier = @"GMGridViewCellIdentifier";
 
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (max <= [self picker].selectedAssets.count]){
+    if (max <= [self picker].selectedAssets.count){
         return NO;
     }
     PHAsset *asset = self.assetsFetchResults[indexPath.item];
@@ -555,7 +555,7 @@ NSString * const GMGridViewCellIdentifier = @"GMGridViewCellIdentifier";
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (max <= [self picker].selectedAssets.count]){
+    if (max <= [self picker].selectedAssets.count){
         return;
     }
 
