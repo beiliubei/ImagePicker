@@ -78,11 +78,13 @@ NSString * const GMGridViewCellIdentifier = @"GMGridViewCellIdentifier";
     NSString* docsPath;
     int docCount;
     int doc_thumbCount;
+
+    NSInteger max;
 }
 
 @synthesize dic_asset_fetches;
 
--(id)initWithPicker:(GMImagePickerController *)picker
+-(id)initWithPicker:(GMImagePickerController *)picker maximumImagesCount:(NSInteger) maximumImagesCount
 {
     //Custom init. The picker contains custom information to create the FlowLayout
     self.picker = picker;
@@ -130,6 +132,8 @@ NSString * const GMGridViewCellIdentifier = @"GMGridViewCellIdentifier";
     docsPath = [NSTemporaryDirectory()stringByStandardizingPath];
     docCount = 0;
     doc_thumbCount = 0;
+
+    max = maximumImagesCount;
     
     return self;
 }
@@ -434,6 +438,9 @@ NSString * const GMGridViewCellIdentifier = @"GMGridViewCellIdentifier";
 
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (max <= dic_asset_fetches.count){
+        return;
+    }
     PHAsset *asset = self.assetsFetchResults[indexPath.item];
     //GMFetchItem * fetch_item = [dic_asset_fetches objectForKey:[ NSNumber numberWithLong:indexPath.item ]];
     GMFetchItem * fetch_item = [dic_asset_fetches objectForKey:asset];
@@ -548,6 +555,10 @@ NSString * const GMGridViewCellIdentifier = @"GMGridViewCellIdentifier";
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (max <= dic_asset_fetches.count){
+        return;
+    }
+
     PHAsset *asset = self.assetsFetchResults[indexPath.item];
     //GMFetchItem * fetch_item = [dic_asset_fetches objectForKey:[ NSNumber numberWithLong:indexPath.item ]];
     GMFetchItem * fetch_item = [dic_asset_fetches objectForKey:asset];

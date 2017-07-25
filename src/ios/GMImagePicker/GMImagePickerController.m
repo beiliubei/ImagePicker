@@ -74,7 +74,7 @@
 
 - (void)setupNavigationController
 {
-    GMAlbumsViewController *albumsViewController = [[GMAlbumsViewController alloc] init:_allow_video];
+    GMAlbumsViewController *albumsViewController = [[GMAlbumsViewController alloc] init:_allow_video maximumImagesCount:_maximumImagesCount];
     _navigationController = [[UINavigationController alloc] initWithRootViewController:albumsViewController];
     _navigationController.delegate = self;
     

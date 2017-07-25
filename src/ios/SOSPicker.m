@@ -58,6 +58,7 @@ typedef enum : NSUInteger {
 
     self.outputType = [[options objectForKey:@"outputType"] integerValue];
     BOOL allow_video = [[options objectForKey:@"allow_video" ] boolValue ];
+    NSInteger maximumImagesCount = [[options objectForKey:@"maximumImagesCount"] integerValue]
     NSString * title = [options objectForKey:@"title"];
     NSString * message = [options objectForKey:@"message"];
 	BOOL disable_popover = [[options objectForKey:@"disable_popover" ] boolValue];
