@@ -75,14 +75,13 @@ typedef enum : NSUInteger {
 
 - (void)launchGMImagePicker:(bool)allow_video title:(NSString *)title message:(NSString *)message disable_popover:(BOOL)disable_popover maximumImagesCount:(NSInteger) maximumImagesCount
 {
-    GMImagePickerController *picker = [[GMImagePickerController alloc] init:allow_video];
+    GMImagePickerController *picker = [[GMImagePickerController alloc] init:YES maximumImagesCount:maximumImagesCount];
     picker.delegate = self;
     picker.title = title;
     picker.customNavigationBarPrompt = message;
     picker.colsInPortrait = 4;
     picker.colsInLandscape = 6;
     picker.minimumInteritemSpacing = 2.0;
-    picker.maximumImagesCount = maximumImagesCount;
 
 	if(!disable_popover) {
 	    picker.modalPresentationStyle = UIModalPresentationPopover;

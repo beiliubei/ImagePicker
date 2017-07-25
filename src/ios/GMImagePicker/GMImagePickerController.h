@@ -25,7 +25,7 @@ static CGSize const kPopoverContentSize = {480, 720};
  */
 @interface GMImagePickerController : UIViewController
 
-- (id)init:(bool)allow_v;
+- (id)init:(bool)allow_v maximumImagesCount:(NSInteger)maximumImagesCount;
 
 /**
  *  The assets picker’s delegate object.
