@@ -8,9 +8,7 @@
 
 #import "SOSPicker.h"
 
-
 #import "GMImagePickerController.h"
-#import "GMFetchItem.h"
 
 #define CDV_PHOTO_PREFIX @"cdv_photo_"
 
@@ -167,7 +165,7 @@ typedef enum : NSUInteger {
 
 #pragma mark - GMImagePickerControllerDelegate
 
-- (void)assetsPickerController:(GMImagePickerController *)picker didFinishPickingAssets:(NSArray *)fetchArray
+- (void)assetsPickerController:(GMImagePickerController *)picker didFinishPickingAssets:(NSArray *)assetArray
 {
     [picker.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 
