@@ -181,7 +181,7 @@ typedef enum : NSUInteger {
     // NSError* err = nil;
     // int i = 1;
     // NSString* filePath;
-    CDVPluginResult* result = nil;
+    __block CDVPluginResult* result = nil;
 
     // for (GMFetchItem *item in fetchArray) {
 
