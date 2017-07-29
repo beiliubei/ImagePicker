@@ -2,7 +2,7 @@
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
   xmlns:android="http://schemas.android.com/apk/res/android"
   id="com.synconset.imagepicker"
-  version="2.1.8">
+  version="2.2.0">
 
     <name>ImagePicker</name>
 
@@ -36,17 +36,11 @@
         <header-file src="src/ios/SOSPicker.h" />
         <source-file src="src/ios/SOSPicker.m" />
 
-        <header-file src="src/ios/GMImagePicker/UIImage+fixOrientation.h" />
-        <source-file src="src/ios/GMImagePicker/UIImage+fixOrientation.m" />
-
         <header-file src="src/ios/GMImagePicker/GMAlbumsViewCell.h" />
         <source-file src="src/ios/GMImagePicker/GMAlbumsViewCell.m" />
 
         <header-file src="src/ios/GMImagePicker/GMAlbumsViewController.h" />
         <source-file src="src/ios/GMImagePicker/GMAlbumsViewController.m" />
-
-        <header-file src="src/ios/GMImagePicker/GMFetchItem.h" />
-        <source-file src="src/ios/GMImagePicker/GMFetchItem.m" />
 
         <header-file src="src/ios/GMImagePicker/GMGridViewCell.h" />
         <source-file src="src/ios/GMImagePicker/GMGridViewCell.m" />
@@ -56,12 +50,6 @@
 
         <header-file src="src/ios/GMImagePicker/GMImagePickerController.h" />
         <source-file src="src/ios/GMImagePicker/GMImagePickerController.m" />
-
-        <header-file src="src/ios/GMImagePicker/PSYBlockTimer.h" />
-        <source-file src="src/ios/GMImagePicker/PSYBlockTimer.m" />
-
-        <header-file src="src/ios/GMImagePicker/GMPHAsset.h" />
-        <source-file src="src/ios/GMImagePicker/GMPHAsset.m" />
 
         <resource-file src="src/ios/GMImagePicker/GMEmptyFolder@1x.png" />
         <resource-file src="src/ios/GMImagePicker/GMEmptyFolder@2x.png" />
@@ -73,6 +61,7 @@
         <resource-file src="src/ios/GMImagePicker/GMVideoIcon@2x.png" />
         
         <resource-file src="src/ios/GMImagePicker/en.lproj" />
+        <resource-file src="src/ios/GMImagePicker/zh-hans.lproj" />
 
         <framework src="Accelerate.framework" />
         <framework src="Security.framework" />
