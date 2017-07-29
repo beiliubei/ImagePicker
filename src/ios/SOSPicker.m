@@ -75,13 +75,23 @@ typedef enum : NSUInteger {
 
 - (void)launchGMImagePicker:(bool)allow_video title:(NSString *)title message:(NSString *)message disable_popover:(BOOL)disable_popover maximumImagesCount:(NSInteger) maximumImagesCount
 {
-    GMImagePickerController *picker = [[GMImagePickerController alloc] init:YES maximumImagesCount:maximumImagesCount];
+    GMImagePickerController *picker = [[GMImagePickerController alloc] init];
     picker.delegate = self;
     picker.title = title;
     picker.customNavigationBarPrompt = message;
     picker.colsInPortrait = 4;
     picker.colsInLandscape = 6;
     picker.minimumInteritemSpacing = 2.0;
+    picker.allowsMultipleSelection = NO;
+
+    picker.showCameraButton = YES;
+    picker.autoSelectCameraImages = YES;
+
+    if (maximumImagesCount > 1){
+        picker.mediaTypes = @[@(PHAssetMediaTypeImage),@(PHAssetMediaTypeVideo)];
+    }else{
+        picker.mediaTypes = @[@(PHAssetMediaTypeImage)];
+    }
 
 	if(!disable_popover) {
 	    picker.modalPresentationStyle = UIModalPresentationPopover;
@@ -161,75 +171,97 @@ typedef enum : NSUInteger {
 {
     [picker.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 
-    NSLog(@"GMImagePicker: User finished picking assets. Number of selected items is: %lu", (unsigned long)fetchArray.count);
+    // NSLog(@"GMImagePicker: User finished picking assets. Number of selected items is: %lu", (unsigned long)fetchArray.count);
 
     NSMutableArray * result_all = [[NSMutableArray alloc] init];
-    CGSize targetSize = CGSizeMake(self.width, self.height);
-    NSFileManager* fileMgr = [[NSFileManager alloc] init];
-    NSString* docsPath = [NSTemporaryDirectory()stringByStandardizingPath];
+    // CGSize targetSize = CGSizeMake(self.width, self.height);
+    // NSFileManager* fileMgr = [[NSFileManager alloc] init];
+    // NSString* docsPath = [NSTemporaryDirectory()stringByStandardizingPath];
 
-    NSError* err = nil;
-    int i = 1;
-    NSString* filePath;
+    // NSError* err = nil;
+    // int i = 1;
+    // NSString* filePath;
     CDVPluginResult* result = nil;
 
-    for (GMFetchItem *item in fetchArray) {
+    // for (GMFetchItem *item in fetchArray) {
 
-        if ( !item.image_fullsize ) {
-            continue;
-        }
+    //     if ( !item.image_fullsize ) {
+    //         continue;
+    //     }
 
-        do {
-            filePath = [NSString stringWithFormat:@"%@/%@%03d.%@", docsPath, CDV_PHOTO_PREFIX, i++, @"jpg"];
-        } while ([fileMgr fileExistsAtPath:filePath]);
+    //     do {
+    //         filePath = [NSString stringWithFormat:@"%@/%@%03d.%@", docsPath, CDV_PHOTO_PREFIX, i++, @"jpg"];
+    //     } while ([fileMgr fileExistsAtPath:filePath]);
 
-        NSData* data = nil;
-        if (self.width == 0 && self.height == 0) {
-            // no scaling required
-            if (self.outputType == BASE64_STRING){
-                UIImage* image = [UIImage imageNamed:item.image_fullsize];
-                [result_all addObject:[UIImageJPEGRepresentation(image, self.quality/100.0f) base64EncodedStringWithOptions:0]];
-            } else {
-                if (self.quality == 100) {
-                    // no scaling, no downsampling, this is the fastest option
-                    [result_all addObject:item.image_fullsize];
-                } else {
-                    // resample first
-                    UIImage* image = [UIImage imageNamed:item.image_fullsize];
-                    data = UIImageJPEGRepresentation(image, self.quality/100.0f);
-                    if (![data writeToFile:filePath options:NSAtomicWrite error:&err]) {
-                        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_IO_EXCEPTION messageAsString:[err localizedDescription]];
-                        break;
-                    } else {
-                        [result_all addObject:[[NSURL fileURLWithPath:filePath] absoluteString]];
-                    }
+    //     NSData* data = nil;
+    //     if (self.width == 0 && self.height == 0) {
+    //         // no scaling required
+    //         if (self.outputType == BASE64_STRING){
+    //             UIImage* image = [UIImage imageNamed:item.image_fullsize];
+    //             [result_all addObject:[UIImageJPEGRepresentation(image, self.quality/100.0f) base64EncodedStringWithOptions:0]];
+    //         } else {
+    //             if (self.quality == 100) {
+    //                 // no scaling, no downsampling, this is the fastest option
+    //                 [result_all addObject:item.image_fullsize];
+    //             } else {
+    //                 // resample first
+    //                 UIImage* image = [UIImage imageNamed:item.image_fullsize];
+    //                 data = UIImageJPEGRepresentation(image, self.quality/100.0f);
+    //                 if (![data writeToFile:filePath options:NSAtomicWrite error:&err]) {
+    //                     result = [CDVPluginResult resultWithStatus:CDVCommandStatus_IO_EXCEPTION messageAsString:[err localizedDescription]];
+    //                     break;
+    //                 } else {
+    //                     [result_all addObject:[[NSURL fileURLWithPath:filePath] absoluteString]];
+    //                 }
+    //             }
+    //         }
+    //     } else {
+    //         // scale
+    //         UIImage* image = [UIImage imageNamed:item.image_fullsize];
+    //         UIImage* scaledImage = [self imageByScalingNotCroppingForSize:image toSize:targetSize];
+    //         data = UIImageJPEGRepresentation(scaledImage, self.quality/100.0f);
+
+    //         if (![data writeToFile:filePath options:NSAtomicWrite error:&err]) {
+    //             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_IO_EXCEPTION messageAsString:[err localizedDescription]];
+    //             break;
+    //         } else {
+    //             if(self.outputType == BASE64_STRING){
+    //                 [result_all addObject:[data base64EncodedStringWithOptions:0]];
+    //             } else {
+    //                 [result_all addObject:[[NSURL fileURLWithPath:filePath] absoluteString]];
+    //             }
+    //         }
+    //     }
+    // }
+
+    for (PHAsset *asset in assetArray) {
+        if (asset.mediaType == PHAssetMediaTypeImage) {
+            [asset requestContentEditingInputWithOptions:nil
+                                       completionHandler:^(PHContentEditingInput *contentEditingInput, NSDictionary *info) {
+                                           NSURL *imageURL = contentEditingInput.fullSizeImageURL;
+                                           [result_all addObject:imageURL.absoluteString];
+
+                                           if (result == nil) {
+                                                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:result_all];
+                                            }
+
+                                            [self.viewController dismissViewControllerAnimated:YES completion:nil];
+                                            [self.commandDelegate sendPluginResult:result callbackId:self.callbackId];
+                                       }];
+        }else if(asset.mediaType == PHAssetMediaTypeVideo){
+            [[PHImageManager defaultManager] requestAVAssetForVideo:asset options:nil resultHandler:^(AVAsset *avAsset, AVAudioMix *audioMix, NSDictionary *info) {
+                NSURL *url = (NSURL *)[(AVURLAsset *)avAsset URL];
+                [result_all addObject:url.absoluteString];
+
+                if (result == nil) {
+                    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:result_all];
                 }
-            }
-        } else {
-            // scale
-            UIImage* image = [UIImage imageNamed:item.image_fullsize];
-            UIImage* scaledImage = [self imageByScalingNotCroppingForSize:image toSize:targetSize];
-            data = UIImageJPEGRepresentation(scaledImage, self.quality/100.0f);
 
-            if (![data writeToFile:filePath options:NSAtomicWrite error:&err]) {
-                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_IO_EXCEPTION messageAsString:[err localizedDescription]];
-                break;
-            } else {
-                if(self.outputType == BASE64_STRING){
-                    [result_all addObject:[data base64EncodedStringWithOptions:0]];
-                } else {
-                    [result_all addObject:[[NSURL fileURLWithPath:filePath] absoluteString]];
-                }
-            }
+                [self.viewController dismissViewControllerAnimated:YES completion:nil];
+                [self.commandDelegate sendPluginResult:result callbackId:self.callbackId];
+            }];
         }
     }
-
-    if (result == nil) {
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:result_all];
-    }
-
-    [self.viewController dismissViewControllerAnimated:YES completion:nil];
-    [self.commandDelegate sendPluginResult:result callbackId:self.callbackId];
 
 }
 
